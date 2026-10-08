@@ -1,0 +1,69 @@
+# Standalone LYNet configuration for BCI Competition IV 2a.
+
+experiment_name: V121_FastFP32
+network: LYNet
+
+network_args:
+  C: 22
+  T: 1000
+  F_filters: 8
+  D: 2
+  num_classes: 4
+  spatial_max_norm: 1.0
+  classifier_max_norm: 0.25
+  augmentation_mode: time
+  augmentation_position: pre_sinc
+  augmentation_schedule: linear_rise
+  intrinsic_max_masked_components: 6
+  intrinsic_probability: 1.00
+
+# Put the original BCI Competition IV 2a files here, or replace with an
+# absolute path. It must contain 2a_gdf/A01T.gdf ... A09E.gdf and
+# 2a_label/A01T.mat ... A09E.mat.
+data_root: ../BCI_2a
+cache_dir: ../V121/dataset/cache_v121
+subjects: [1]
+
+preprocessing:
+  sampling_rate: 250
+  task_start_s: 0.0
+  task_stop_s: 4.0
+  baseline_start_s: -2.0
+  baseline_stop_s: 0.0
+  power_windows: 4
+  power_bands_hz:
+    - [4.0, 8.0]
+    - [8.0, 12.0]
+    - [12.0, 16.0]
+    - [16.0, 20.0]
+    - [20.0, 24.0]
+    - [24.0, 32.0]
+  shrinkage: 0.0
+  eta: 1.0
+  covariance_epsilon: 0.000001
+  main_standardize: true
+  power_standardize: true
+
+protocol:
+  name: offline_transductive_run_baseline_best_e
+  train_session: AxxT
+  evaluation_session: AxxE
+  alignment_reference: all_unlabelled_pre_cue_baselines_per_run
+  reference_uses_evaluation_labels: false
+  evaluate_every_epoch: true
+  checkpoint_selection: best_evaluation_accuracy
+  reporting_scope: exploratory_offline_transductive
+
+preferred_device: gpu
+device_id: 0
+random_seed: 0
+batch_size: 16
+epochs: 500
+lr: 0.001
+weight_decay: 0.0001
+num_workers: 0
+deterministic: true
+cudnn_benchmark: false
+use_deterministic_algorithms: true
+
+out_folder: output/V121_FastFP32

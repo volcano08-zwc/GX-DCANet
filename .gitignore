@@ -1,0 +1,36 @@
+# Python bytecode and test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environments and local settings
+.venv/
+venv/
+.env
+.env.*
+
+# Private datasets and generated caches
+data_local/
+datasets/
+private_data/
+cache/
+*.npy
+*.npz
+*.bin
+
+# Training artifacts
+output/
+outputs/
+runs/
+checkpoints/
+wandb/
+tensorboard/
+*.pt
+*.pth
+*.ckpt
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
