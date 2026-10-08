@@ -17,7 +17,7 @@ V121_FastFP32/
 │   └── LYNet26BCI.py              # 16 通道/2 类/500 Hz 模型
 ├── protocol/
 │   ├── lynet_protocol.py          # 原 2a 协议
-│   └── lynet_26bci_protocol.py    # 26BCI 分组验证、早停、外层测试协议
+│   └── lynet_26bci_protocol.py    # 26BCI 分组验证、最佳模型和外层测试协议
 └── train_lynet_26bci.py           # 26BCI 训练入口
 ```
 
@@ -92,7 +92,7 @@ X_EA = W X
    - 新提取的 EA 参考也逐窗独立双向滤波；
    - EA 可使用测试 session 自身的无标签非任务参考，属于无监督的 session 校准，不读取测试标签。
 
-训练损失按“域 → 类别 → group → 窗”分层加权，避免长治疗 segment 或多数类仅凭窗数支配训练。默认 batch size 为 64，标准预训练和治疗适配的最大 epoch 都为 500，patience 为 50。
+训练损失按“域 → 类别 → group → 窗”分层加权，避免长治疗 segment 或多数类仅凭窗数支配训练。默认 batch size 为 64，标准预训练和治疗适配都固定完整训练 500 epoch，不使用早停；每个 epoch 仍在验证集上评估并保存验证指标最好的 checkpoint。
 
 ## 运行方法
 

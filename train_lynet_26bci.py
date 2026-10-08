@@ -147,7 +147,7 @@ def run_patient(
     base_result = base_protocol.fit(
         _dataset(views, data, base_train, weighted=True),
         _dataset(views, data, base_validation, weighted=False),
-        max_epochs=int(config["epochs"]), patience=int(config["patience"]),
+        max_epochs=int(config["epochs"]),
         checkpoint_name="standard_best.pth",
     )
     base_checkpoint = base_dir / "standard_best.pth"
@@ -182,7 +182,6 @@ def run_patient(
             _dataset(views, data, selection_train, weighted=True),
             _dataset(views, data, treatment_inner_validation, weighted=False),
             max_epochs=int(config["adaptation_epochs"]),
-            patience=int(config["patience"]),
             checkpoint_name="adaptation_selection_best.pth",
         )
 

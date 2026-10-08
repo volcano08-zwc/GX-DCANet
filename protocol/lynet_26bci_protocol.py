@@ -187,14 +187,12 @@ class Protocol26BCI:
         validation_set: Dataset26BCI,
         *,
         max_epochs: int,
-        patience: int,
         checkpoint_name: str = "best.pth",
     ) -> dict:
         best_key = (-np.inf, -np.inf, -np.inf, -np.inf)
         best_state = None
         best_metrics = None
         best_epoch = 0
-        stale = 0
         history = []
         for epoch in range(1, int(max_epochs) + 1):
             self.model.augmentation.probability = 0.5 * (epoch - 1) / max(1, max_epochs - 1)
@@ -211,17 +209,12 @@ class Protocol26BCI:
                 best_epoch = epoch
                 best_metrics = self._serializable(validation_metrics)
                 best_state = copy.deepcopy(self.model.state_dict())
-                stale = 0
-            else:
-                stale += 1
             print(
                 f"[26BCI] epoch={epoch:03d}/{max_epochs} "
                 f"train_BA={train_metrics['balanced_accuracy']:.4f} "
                 f"val_BA={validation_metrics['balanced_accuracy']:.4f} "
                 f"best={best_key[0]:.4f}", flush=True,
             )
-            if stale >= int(patience):
-                break
         if best_state is None:
             raise RuntimeError("Training produced no checkpoint.")
         self.model.load_state_dict(best_state)
