@@ -8,9 +8,10 @@ import torch
 from torch import nn
 
 from .LYNet import LYNet
+from .LYNet26BCI import LYNet26BCI
 
 
-MODEL_REGISTRY = {"LYNet": LYNet}
+MODEL_REGISTRY = {"LYNet": LYNet, "LYNet26BCI": LYNet26BCI}
 
 
 def available_models() -> tuple[str, ...]:
@@ -33,7 +34,7 @@ def build_registered_model(
 ) -> nn.Module:
     if name not in MODEL_REGISTRY:
         raise ValueError(
-            "This standalone package contains LYNet only."
+            f"Unknown model {name!r}; available models: {available_models()}."
         )
     model = MODEL_REGISTRY[name](**dict(model_args)).to(device)
     if dcanet_initializer is not None:
@@ -59,7 +60,7 @@ def validate_model_data_contract(
 ) -> None:
     if name not in MODEL_REGISTRY:
         raise ValueError(
-            "This standalone package contains LYNet only."
+            f"Unknown model {name!r}; available models: {available_models()}."
         )
     args = dict(model_args)
     declared = (

@@ -1,0 +1,85 @@
+# V121/RUN-EA configuration for the local 26BCI binary dataset.
+
+experiment_name: V121_26BCI_SESSION_RUN_EA
+network: LYNet26BCI
+channels: 16
+samples: 500
+sampling_rate: 500
+num_classes: 2
+
+network_args:
+  C: 16
+  T: 500
+  F_filters: 8
+  D: 2
+  num_classes: 2
+  sample_rate: 500
+  power_features: 96
+  spatial_max_norm: 1.0
+  classifier_max_norm: 0.25
+  augmentation_mode: time
+  augmentation_position: pre_sinc
+  augmentation_schedule: linear_rise
+  intrinsic_max_masked_components: 6
+  intrinsic_probability: 1.0
+
+# BCI26_DATA_ROOT may override this value on a server.
+data_root: ../../pdata/26BCI_学长交接_精简上传版_20261001/03_restricted_project_data/26BCI
+derived_data_dir: work/csanet_treatment_experiments_20260910/data
+runtime_data_dir: thumb-control/eeg_runtime/data
+runtime_models_dir: thumb-control/eeg_runtime/models
+cache_dir: cache/26bci_v121
+cases: [G, X]
+case_specs:
+  G:
+    base_model_version: 20260906T102019745773Z
+  X:
+    base_model_version: 20260905T100642859474Z
+
+preprocessing:
+  low_hz: 4.0
+  high_hz: 40.0
+  filter_order: 4
+  reflect_padding: 100
+  ea_reference_seconds: 1.0
+  standard_prepare_margin_seconds: 1.0
+  treatment_gap_guard_seconds: 1.0
+  treatment_reference_cap: 50
+  shrinkage: 0.1
+  covariance_epsilon: 0.000001
+  power_bands_hz:
+    - [4.0, 8.0]
+    - [8.0, 12.0]
+    - [12.0, 16.0]
+    - [16.0, 20.0]
+    - [20.0, 24.0]
+    - [24.0, 32.0]
+
+protocol:
+  name: standard_pretrain_then_treatment_grouped_3fold
+  run_definition: one session_id is one run
+  ea_reference_standard: middle 3 seconds of initial_prepare, split into 1-second windows
+  ea_reference_treatment: central 1-second windows from unlabelled inter-segment gaps with 1-second guard
+  split_unit: complete standard trial or complete treatment segment
+  normalization_fit_scope: standard base-train windows only
+  outer_evaluation: original treatment folds 0/1/2
+  inner_validation: grouped treatment segments from the two non-test folds
+  test_fold_used_for_selection: false
+
+preferred_device: gpu
+device_id: 0
+random_seed: 42
+batch_size: 64
+epochs: 500
+adaptation_epochs: 500
+lr: 0.001
+adaptation_lr: 0.0001
+weight_decay: 0.0001
+adaptation_weight_decay: 0.001
+patience: 50
+num_workers: 0
+deterministic: true
+cudnn_benchmark: false
+use_deterministic_algorithms: true
+
+out_folder: output/V121_26BCI
