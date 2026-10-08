@@ -109,10 +109,16 @@ python train_lynet_26bci.py
 python train_lynet_26bci.py --cases G
 ```
 
-服务器上的数据路径可用环境变量覆盖，无需改代码：
+配置文件默认直接使用服务器路径：
+
+```text
+/home/jqsj/hzy/zwc/DCANet/pdata/26BCI
+```
+
+在本地运行时，可用环境变量临时覆盖该路径：
 
 ```bash
-export BCI26_DATA_ROOT=/path/to/26BCI
+export BCI26_DATA_ROOT=/local/path/to/26BCI
 python train_lynet_26bci.py --cases G,X
 ```
 

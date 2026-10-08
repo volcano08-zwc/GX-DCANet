@@ -23,8 +23,8 @@ network_args:
   intrinsic_max_masked_components: 6
   intrinsic_probability: 1.0
 
-# BCI26_DATA_ROOT may override this value on a server.
-data_root: ../../pdata/26BCI_学长交接_精简上传版_20261001/03_restricted_project_data/26BCI
+# Server dataset root. BCI26_DATA_ROOT can still override it for local runs.
+data_root: /home/jqsj/hzy/zwc/DCANet/pdata/26BCI
 derived_data_dir: work/csanet_treatment_experiments_20260910/data
 runtime_data_dir: thumb-control/eeg_runtime/data
 runtime_models_dir: thumb-control/eeg_runtime/models
